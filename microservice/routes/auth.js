@@ -16,6 +16,7 @@ router.post('/register', [
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   body('role').optional().isIn(['admin', 'student']).withMessage('Role must be admin or student')
 ], async (req, res) => {
+  console.log('📩 Register route hit with body:', req.body); 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -92,7 +93,7 @@ router.post('/login', [
     loginAttempts.delete(ip);
     logger.info(`User ${username} logged in successfully from IP ${ip}`);
 
-    const payload = { user: { id: user.id, username: user.username, role: user.role } };
+    const payload = { user: { id: user._id, username: user.username, role: user.role } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ token });
