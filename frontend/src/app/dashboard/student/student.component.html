@@ -1,1 +1,22 @@
-<p>student works!</p>
+<div class="dashboard-container">
+  <h1>Student Dashboard</h1>
+
+  <section class="assignments-section">
+    <h2>Available Assignments</h2>
+
+    <div *ngIf="assignments.length === 0" class="no-assignments">
+      <p>No assignments available at the moment.</p>
+    </div>
+
+    <ul *ngIf="assignments.length > 0" class="assignment-list">
+      <li *ngFor="let assignment of assignments" class="assignment-item">
+        <div class="assignment-info">
+          <h3>{{ assignment.title }}</h3>
+          <p><strong>Description:</strong> {{ assignment.description }}</p>
+          <p><strong>Due Date:</strong> {{ assignment.dueDate | date }}</p>
+        </div>
+        <button (click)="submitAssignment(assignment._id)">Submit</button>
+      </li>
+    </ul>
+  </section>
+</div>

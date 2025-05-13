@@ -1,1 +1,35 @@
-<p>admin works!</p>
+<div class="admin-dashboard">
+  <h1>Admin Dashboard</h1>
+
+  <section class="upload-form">
+    <h2>Upload New Assignment</h2>
+    <form (ngSubmit)="uploadAssignment()" #assignmentForm="ngForm">
+      <label>
+        Title:
+        <input type="text" name="title" [(ngModel)]="newAssignment.title" required />
+      </label>
+      <br />
+
+      <label>
+        Description:
+        <textarea name="description" [(ngModel)]="newAssignment.description" required></textarea>
+      </label>
+      <br />
+
+      <label>
+        Due Date:
+        <input type="date" name="dueDate" [(ngModel)]="newAssignment.dueDate" required />
+      </label>
+      <br />
+
+      <button type="submit" [disabled]="assignmentForm.invalid">Upload Assignment</button>
+    </form>
+  </section>
+
+  <hr />
+
+  <section class="feedback-section">
+    <h2>Student Submissions</h2>
+    <!-- Existing feedback logic can go here -->
+  </section>
+</div>
