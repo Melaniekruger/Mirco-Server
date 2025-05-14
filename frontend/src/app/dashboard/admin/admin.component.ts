@@ -45,16 +45,30 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  giveFeedback(submissionId: string, feedback: string, grade: number) {
-    const token = localStorage.getItem('token');
-    this.http.post(`http://localhost:5000/api/submissions/${submissionId}/feedback`, {
-      feedback,
-      grade
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
-      next: () => alert('Feedback submitted!'),
-      error: err => console.error(err)
-    });
+  giveFeedback(submissionId: string, feedback: string, gradeInput: string) {
+  const token = localStorage.getItem('token');
+  const grade = Number(gradeInput);
+
+  if (isNaN(grade)) {
+  alert('Please enter a valid number for grade.');
+  return;
   }
+  console.log('Submitting feedback for Submission ID:', submissionId);
+  console.log('Feedback:', feedback);
+  console.log('Grade:', grade);
+
+  this.http.put(`http://localhost:5000/api/submissions/${submissionId}/feedback`, {
+    feedback,
+    mark: grade // ✅ use "mark" as backend expects
+  }, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).subscribe({
+    next: () => alert('Feedback submitted!'),
+    error: err => {
+      console.error('Feedback error:', err);
+      alert('Failed to submit feedback');
+    }
+  });
+}
+
 }

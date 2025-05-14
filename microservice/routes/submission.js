@@ -70,9 +70,15 @@ router.put(
   async (req, res) => {
     const { feedback, mark } = req.body;
 
+    // Debugging: Log the submissionId received from the URL parameter
+    console.log('Received feedback for submission ID:', req.params.id);
+
     try {
       const submission = await Submission.findById(req.params.id);
-      if (!submission) return res.status(404).json({ msg: 'Submission not found' });
+      if (!submission) {
+        console.log('Submission not found for ID:', req.params.id);
+        return res.status(404).json({ msg: 'Submission not found' });
+      }
 
       if (feedback) submission.feedback = feedback;
       if (mark !== undefined) submission.mark = mark;

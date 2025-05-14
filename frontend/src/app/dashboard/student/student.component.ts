@@ -24,12 +24,24 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   submitAssignment(assignmentId: string) {
-    const token = localStorage.getItem('token');
-    this.http.post(`http://localhost:5000/api/submissions/${assignmentId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).subscribe({
-      next: () => alert('Assignment submitted successfully'),
-      error: err => console.error(err)
-    });
-  }
+  console.log('Submitting assignment with ID:', assignmentId); // Debugging output
+  const token = localStorage.getItem('token');
+  
+  const submissionData = {
+    assignmentId: assignmentId,     // ✅ sent in body, not in URL
+    content: 'My submission'        // ✅ placeholder, update as needed
+  };
+
+  this.http.post('http://localhost:5000/api/submissions', submissionData, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).subscribe({
+    next: () => alert('Assignment submitted successfully'),
+    error: err => {
+      console.error('Error submitting assignment:', err);
+      alert('Submission failed');
+    }
+  });
+}
+
+
 }

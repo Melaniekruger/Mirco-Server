@@ -29,7 +29,30 @@
   <hr />
 
   <section class="feedback-section">
-    <h2>Student Submissions</h2>
-    <!-- Existing feedback logic can go here -->
-  </section>
+  <h2>Student Submissions</h2>
+
+  <div *ngIf="submissions.length > 0; else noSubmissions">
+    <div *ngFor="let submission of submissions" class="submission-card">
+      <h3>Assignment: {{ submission.assignment?.title }}</h3>
+      <p><strong>Submitted by:</strong> {{ submission.student?.username }}</p>
+      <p><strong>Content:</strong> {{ submission.content }}</p>
+      <label>
+        Feedback:
+        <input type="text" #feedbackInput />
+      </label>
+      <br />
+      <label>
+        Grade:
+        <input type="number" #gradeInput />
+      </label>
+      <br />
+      <button (click)="giveFeedback(submission._id, feedbackInput.value, gradeInput.value)">Submit Feedback</button>
+    </div>
+  </div>
+
+  <ng-template #noSubmissions>
+    <p>No submissions found.</p>
+  </ng-template>
+</section>
+
 </div>
