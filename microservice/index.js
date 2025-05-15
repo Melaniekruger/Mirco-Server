@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const statusMonitor = require('express-status-monitor');
-
+require('dotenv').config();
 // Limit to 5 requests every 10 minutes per IP
 const authLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -14,7 +14,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-dotenv.config();
+//dotenv.config();
 const app = express();
 
 connectDB();
@@ -26,6 +26,9 @@ app.use(statusMonitor());
 app.get('/status', statusMonitor().pageRoute);
 
 app.use('/api/auth', require('./routes/auth'));
+
+app.use('/api/assignments', require('./routes/Assignment'));
+app.use('/api/submissions', require('./routes/submission'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
