@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const statusMonitor = require('express-status-monitor');
-
+require('dotenv').config();
 // Limit to 5 requests every 10 minutes per IP
 const authLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -14,7 +14,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-dotenv.config();
+//dotenv.config();
 const app = express();
 
 connectDB();
