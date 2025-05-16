@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-//Hello
+import { environment } from '../../../environments/environment'; // ✅ Use correct path
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -10,7 +11,6 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./login.component.scss'],
   imports: [ReactiveFormsModule, RouterModule],
 })
-
 export class LoginComponent {
   loginForm: FormGroup;
 
@@ -24,10 +24,11 @@ export class LoginComponent {
       password: ['', Validators.required]
     });
   }
+
   onSubmit() {
     const formData = this.loginForm.value;
 
-    this.http.post<any>('http://localhost:5000/api/auth/login', formData).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/auth/login`, formData).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
 
@@ -47,3 +48,4 @@ export class LoginComponent {
     });
   }
 }
+

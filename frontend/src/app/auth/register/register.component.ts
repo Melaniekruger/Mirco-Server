@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment'; // ✅ Import environment config
 
 @Component({
   selector: 'app-register',
@@ -34,7 +35,7 @@ export class RegisterComponent {
     const formData = this.registerForm.value;
     console.log('Form data:', formData);
 
-    this.http.post<any>('http://localhost:5000/api/auth/register', formData).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/auth/register`, formData).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
 
