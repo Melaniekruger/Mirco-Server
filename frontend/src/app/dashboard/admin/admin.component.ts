@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment'; // ✅ import environment
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,7 +14,6 @@ import { FormsModule } from '@angular/forms';
 export class AdminDashboardComponent implements OnInit {
   submissions: any[] = [];
 
-  // Form model
   newAssignment = {
     title: '',
     description: '',
@@ -24,19 +24,19 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     const token = localStorage.getItem('token');
-    this.http.get<any[]>('http://localhost:5000/api/submissions', {
+    this.http.get<any[]>(`${environment.apiUrl}/api/submissions`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe(data => this.submissions = data);
   }
 
   uploadAssignment() {
     const token = localStorage.getItem('token');
-    this.http.post('http://localhost:5000/api/assignments', this.newAssignment, {
+    this.http.post(`${environment.apiUrl}/api/assignments`, this.newAssignment, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {
         alert('Assignment uploaded!');
-        this.newAssignment = { title: '', description: '', dueDate: '' }; // reset form
+        this.newAssignment = { title: '', description: '', dueDate: '' };
       },
       error: (err) => {
         console.error(err);
@@ -46,29 +46,29 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   giveFeedback(submissionId: string, feedback: string, gradeInput: string) {
-  const token = localStorage.getItem('token');
-  const grade = Number(gradeInput);
+    const token = localStorage.getItem('token');
+    const grade = Number(gradeInput);
 
-  if (isNaN(grade)) {
-  alert('Please enter a valid number for grade.');
-  return;
-  }
-  console.log('Submitting feedback for Submission ID:', submissionId);
-  console.log('Feedback:', feedback);
-  console.log('Grade:', grade);
-
-  this.http.put(`http://localhost:5000/api/submissions/${submissionId}/feedback`, {
-    feedback,
-    mark: grade // ✅ use "mark" as backend expects
-  }, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).subscribe({
-    next: () => alert('Feedback submitted!'),
-    error: err => {
-      console.error('Feedback error:', err);
-      alert('Failed to submit feedback');
+    if (isNaN(grade)) {
+      alert('Please enter a valid number for grade.');
+      return;
     }
-  });
-}
 
+    console.log('Submitting feedback for Submission ID:', submissionId);
+    console.log('Feedback:', feedback);
+    console.log('Grade:', grade);
+
+    this.http.put(`${environment.apiUrl}/api/submissions/${submissionId}/feedback`, {
+      feedback,
+      mark: grade
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => alert('Feedback submitted!'),
+      error: err => {
+        console.error('Feedback error:', err);
+        alert('Failed to submit feedback');
+      }
+    });
+  }
 }

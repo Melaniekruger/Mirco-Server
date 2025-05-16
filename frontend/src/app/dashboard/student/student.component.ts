@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // ✅ add this
-import { DatePipe } from '@angular/common';     // ✅ for the "date" pipe
+import { CommonModule, DatePipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule], // ✅ add here
   templateUrl: './student.component.html',
   styleUrls: ['./student.component.scss'],
-  providers: [DatePipe] // ✅ ensure this if needed
+  imports: [CommonModule, HttpClientModule],
+  providers: [DatePipe]
 })
 export class StudentDashboardComponent implements OnInit {
   assignments: any[] = [];
@@ -18,30 +18,29 @@ export class StudentDashboardComponent implements OnInit {
 
   ngOnInit() {
     const token = localStorage.getItem('token');
-    this.http.get<any[]>('http://localhost:5000/api/assignments', {
+    this.http.get<any[]>(`${environment.apiUrl}/api/assignments`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe(data => this.assignments = data);
   }
 
   submitAssignment(assignmentId: string) {
-  console.log('Submitting assignment with ID:', assignmentId); // Debugging output
-  const token = localStorage.getItem('token');
-  
-  const submissionData = {
-    assignmentId: assignmentId,     // ✅ sent in body, not in URL
-    content: 'My submission'        // ✅ placeholder, update as needed
-  };
+    console.log('Submitting assignment with ID:', assignmentId);
 
-  this.http.post('http://localhost:5000/api/submissions', submissionData, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).subscribe({
-    next: () => alert('Assignment submitted successfully'),
-    error: err => {
-      console.error('Error submitting assignment:', err);
-      alert('Submission failed');
-    }
-  });
+    const token = localStorage.getItem('token');
+    const submissionData = {
+      assignmentId: assignmentId,
+      content: 'My submission' // You can replace this with real content from a form
+    };
+
+    this.http.post(`${environment.apiUrl}/api/submissions`, submissionData, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => alert('Assignment submitted successfully'),
+      error: err => {
+        console.error('Error submitting assignment:', err);
+        alert('Submission failed');
+      }
+    });
+  }
 }
 
-
-}
