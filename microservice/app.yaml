@@ -1,0 +1,12 @@
+runtime: nodejs20
+
+instance_class: F1  # Free tier (optional)
+
+env_variables:
+  NODE_ENV: 'production'
+  JWT_SECRET: '7c3a4560cf0b8c1c796d2de8f5308c59bd067485f18d29698e7f5a3fb2c0c3c6c6bc7e8c06769e9cee7f0cc27919211ab4811b7391bab6f680430b3db21c9dff'
+  MONGO_URI: 'mongodb+srv://maderidemeyer:Maderid2211_@microserviceproject.qsayqgj.mongodb.net/?retryWrites=true&w=majority&appName=MicroserviceProject'
+
+handlers:
+  - url: /.*
+    script: auto
